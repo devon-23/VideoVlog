@@ -4,6 +4,7 @@ module.exports = {
     uploadsFolder: path.join(__dirname, "../uploads"),
     outputFolder: path.join(__dirname, "../output"),
     musicFolder: path.join(__dirname, "../music"),
+    endingVideo: path.join(__dirname, "../uploads/ending.mp4"),
 
     imageDuration: 3,
 

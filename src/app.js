@@ -89,7 +89,7 @@ async function main() {
 
 
     const quote =
-    "Oh come on dance with me. I know you want to. Its a beautiful day.";
+    "Oh come on dance with me. I know you want to. It's a beautiful day.";
 
 
     const sections =
@@ -122,6 +122,23 @@ async function main() {
         textTimeline,
         textVideo
     );
+
+    const addEnding =
+require("./renderer/addEnding");
+
+
+const completedVideo =
+path.join(
+    config.outputFolder,
+    "vlog.mp4"
+);
+
+
+await addEnding(
+    textVideo,
+    config.endingVideo,
+    completedVideo
+);
 
     console.log("");
     console.log("🎉 Done!");
