@@ -1,6 +1,7 @@
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
 const path = require("path");
+const config = require("../config");
 
 ffmpeg.setFfmpegPath(ffmpegPath);
 
@@ -41,8 +42,8 @@ function renderVideo(timeline, outputPath) {
 
             filters.push(
                 `[${index}:v]` +
-                `scale=1920:1080:force_original_aspect_ratio=increase,` +
-                `crop=1920:1080,` +
+                `scale=${config.profiles[config.exportProfile].width}:${config.profiles[config.exportProfile].height}:force_original_aspect_ratio=increase,` +
+                `crop=${config.profiles[config.exportProfile].width}:${config.profiles[config.exportProfile].height},` +
                 `fps=30,` +
                 `format=yuv420p,` +
                 `setsar=1` +
