@@ -8,17 +8,17 @@ function buildTextTimeline(date, quoteSections, duration) {
 
     timeline.push({
 
-    text: date,
+        text: date,
 
-    type: "date",
+        type: "date",
 
-    start: 1,
+        start: 1,
 
-    end: 3,
+        end: 3,
 
-    position: "top"
+        position: "top"
 
-});
+    });
 
 
 
@@ -72,18 +72,21 @@ function buildTextTimeline(date, quoteSections, duration) {
 
 
             end:
-                Number(
-                    (
-                    quoteStart +
-                    (index + 1) * sectionDuration
-                    )
-                    .toFixed(2)
-                ),
+                index === quoteSections.length - 1
+
+                    ? duration
+
+                    : Number(
+                        (
+                        quoteStart +
+                        (index + 1) * sectionDuration
+                        )
+                        .toFixed(2)
+                    ),
 
 
             position:
                 positions[index % positions.length]
-
 
         });
 

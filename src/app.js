@@ -10,6 +10,8 @@ const splitQuote = require("./text/quoteSplitter");
 const buildTextTimeline = require("./text/textTimeline");
 const createDateText = require("./text/dateOverlay");
 const addText = require("./text/textRenderer");
+const addEndingText = require("./renderer/addEnding");
+const getRandomQuote = require("./quotes/quoteSelector");
 
 async function main() {
 
@@ -69,12 +71,20 @@ async function main() {
         config.musicFolder
     );
 
+    // Pick quote
+
+    const quote = getRandomQuote();
+
+    console.log(
+        "Today's quote:",
+        quote.text
+    );
+
 
     console.log(
         "Using music:",
         song
     );
-
 
     // Add music
 
@@ -87,18 +97,13 @@ async function main() {
 
     const date = createDateText();
 
+    const sections = quote.sections;
 
-    const quote =
-    "Oh come on dance with me. I know you want to. It's a beautiful day.";
+    console.log("QUOTE:");
+console.log(quote);
 
-
-    const sections =
-    splitQuote(
-        quote,
-        duration
-    );
-
-
+console.log("SECTIONS:");
+console.log(sections);
 
     const textTimeline =
     buildTextTimeline(
@@ -107,15 +112,11 @@ async function main() {
         duration
     );
 
-
-
     const textVideo =
     path.join(
         config.outputFolder,
         "text.mp4"
     );
-
-
 
     await addText(
         finalVideo,
@@ -123,21 +124,44 @@ async function main() {
         textVideo
     );
 
-    const addEnding =
-require("./renderer/addEnding");
+    const addEnding = require("./renderer/addEnding");
 
+    const completedVideo =
+    path.join(
+        config.outputFolder,
+        "vlog.mp4"
+    );
 
-const completedVideo =
+const endingVideo =
 path.join(
     config.outputFolder,
-    "vlog.mp4"
+    "ending.mp4"
 );
 
 
 await addEnding(
     textVideo,
     config.endingVideo,
-    completedVideo
+    endingVideo
+);
+
+const finalOutput =
+path.join(
+    config.outputFolder,
+    "vlog.mp4"
+);
+
+const quoteSections = quote.sections;
+
+const finalQuote =
+    quoteSections[
+        quoteSections.length - 1
+    ];
+
+await addEndingText(
+    endingVideo,
+    finalQuote,
+    finalOutput
 );
 
     console.log("");
