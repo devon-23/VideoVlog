@@ -12,6 +12,10 @@ const createDateText = require("./text/dateOverlay");
 const addText = require("./text/textRenderer");
 const addEndingText = require("./renderer/addEnding");
 const getRandomQuote = require("./quotes/quoteSelector");
+const generateTitle = require("./titles/titleGenerator");
+const writeManifest = require("./project/writeManifest");
+const getCreationDate = require("./timeline/getCreationDate");
+
 
 async function main() {
 
@@ -80,10 +84,50 @@ async function main() {
         quote.text
     );
 
+    //make video title
+    const videoTitle = generateTitle();
+
+    console.log(
+        "Video title:",
+        videoTitle
+    );
 
     console.log(
         "Using music:",
         song
+    );
+
+    const manifest = {
+
+        created:
+            new Date()
+            .toISOString()
+            .split("T")[0],
+
+
+        title:
+            videoTitle,
+
+
+        quote:
+            quote.sections,
+
+
+        music:
+            path.basename(song)
+
+    };
+
+
+    writeManifest(
+
+        manifest,
+
+        path.join(
+            config.outputFolder,
+            "vlog.json"
+        )
+
     );
 
     // Add music
@@ -95,7 +139,9 @@ async function main() {
         duration
     );
 
-    const date = createDateText();
+    //const date = createDateText(vlogDate);
+    const rawDate = await getCreationDate(media); // media, not media.files
+    const vlogDate = createDateText(rawDate);     // format it as MM/DD/YYYY
 
     const sections = quote.sections;
 
@@ -105,9 +151,12 @@ console.log(quote);
 console.log("SECTIONS:");
 console.log(sections);
 
+console.log("DATE VALUE:", vlogDate);
+console.log("DATE TYPE:", typeof vlogDate);
+
     const textTimeline =
     buildTextTimeline(
-        date,
+        vlogDate,
         sections,
         duration
     );

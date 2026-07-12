@@ -1,17 +1,24 @@
-function createDateText(){
-    const today = new Date();
+function createDateText(vlogDate) {
+
+    const date = new Date(vlogDate);
+
 
     const month =
-        String(today.getMonth()+1)
-        .padStart(2,"0");
+        String(date.getMonth() + 1)
+        .padStart(2, "0");
+
 
     const day =
-        String(today.getDate())
-        .padStart(2,"0");
+        String(date.getDate())
+        .padStart(2, "0");
+
 
     const year =
-        today.getFullYear();
+        date.getFullYear();
+
 
     return `${month}/${day}/${year}`;
 }
+
+
 module.exports = createDateText;

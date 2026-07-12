@@ -1,18 +1,49 @@
 const quotes = require("./quotes.json");
 
+const {
+    wasUsed,
+    markUsed
+} = require("../../history/historyManager.js");
 
 function getRandomQuote(){
+    let available =
+        quotes.filter(q => {
 
 
-    const index =
-        Math.floor(
-            Math.random() * quotes.length
-        );
+            const quoteText =
+                q.sections.join(" ");
 
 
-    return quotes[index];
+            return !wasUsed(
+                "quotes",
+                quoteText
+            );
+
+
+        });
+
+    if(available.length === 0){
+
+        available = quotes;
+
+    }
+
+    const quote =
+        available[
+            Math.floor(
+                Math.random()
+                *
+                available.length
+            )
+        ];
+
+    markUsed(
+        "quotes",
+        quote.sections.join(" ")
+    );
+
+    return quote;
 
 }
-
 
 module.exports = getRandomQuote;

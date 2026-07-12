@@ -1,31 +1,26 @@
 function buildTextTimeline(date, quoteSections, duration) {
 
-
     const timeline = [];
 
 
-    // Date card
-
     timeline.push({
 
-        text: date,
+    text: date,   // <-- was date.toLocaleDateString()
 
-        type: "date",
+    type: "date",
 
-        start: 1,
+    start: 1,
 
-        end: 3,
+    end: 3,
 
-        position: "top"
+    position: "top"
 
-    });
-
+});
 
 
     const quoteStart = 3;
 
     const endingTime = duration - 2;
-
 
     const available =
         endingTime - quoteStart;
@@ -35,25 +30,16 @@ function buildTextTimeline(date, quoteSections, duration) {
         available / quoteSections.length;
 
 
-
     const positions = [
-
         "center",
-
         "left",
-
         "right",
-
         "bottom",
-
         "top"
-
     ];
 
 
-
     quoteSections.forEach((section,index)=>{
-
 
         timeline.push({
 
@@ -70,7 +56,6 @@ function buildTextTimeline(date, quoteSections, duration) {
                     .toFixed(2)
                 ),
 
-
             end:
                 index === quoteSections.length - 1
 
@@ -84,12 +69,10 @@ function buildTextTimeline(date, quoteSections, duration) {
                         .toFixed(2)
                     ),
 
-
             position:
                 positions[index % positions.length]
 
         });
-
 
     });
 
