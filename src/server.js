@@ -33,7 +33,7 @@ app.post("/generate", async (req, res) => {
     console.log("Generate request received");
 
     try {
-        const result = await generateVlog();
+        const result = await generateVlog(jobFolder);
 
         res.json({
             success: true,
@@ -70,10 +70,8 @@ app.post(
                     Date.now().toString()
                 );
             fs.mkdirSync(jobFolder);
-            // move uploaded files into job folder
 
             req.files.forEach(file=>{
-
                 fs.renameSync(
                     file.path,
                     path.join(
@@ -86,27 +84,28 @@ app.post(
                     fs.readdirSync(jobFolder)
                 );
             });
-            console.log(
-                "Job folder:",
-                jobFolder
-            );
+
+            console.log("Job folder:", jobFolder);
+
             updateJob({
                 status:"uploading",
                 stage:`Received ${req.files.length} videos`
             });
+
             try {
                 updateJob({
                     status:"processing",
                     stage:"Creating vlog..."
                 });
+
                 const result =
-                    await generateVlog({
-                        uploadsFolder: jobFolder
-                    });
+                    await generateVlog(jobFolder); // <-- fixed: pass the string directly
+
                 res.json({
                     success:true,
                     result
                 });
+
                 updateJob({
                     status:"complete",
                     stage:"Vlog complete 🎉"
@@ -120,9 +119,7 @@ app.post(
                         force:true
                     }
                 );
-                console.log(
-                    "Job folder deleted"
-                );
+                console.log("Job folder deleted");
             }
         }
         catch(error){

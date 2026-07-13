@@ -9,6 +9,29 @@ const historyFile =
     );
 
 
+
+function normalize(value){
+
+    return String(value)
+
+        // normalize curly quotes
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"')
+
+        // remove punctuation
+        .replace(/[.,!?]/g, "")
+
+        // remove extra spaces
+        .replace(/\s+/g, " ")
+
+        // lowercase
+        .trim()
+        .toLowerCase();
+
+}
+
+
+
 function loadHistory(){
 
     return JSON.parse(
@@ -46,8 +69,14 @@ function wasUsed(type,value){
         loadHistory();
 
 
+    const normalizedValue =
+        normalize(value);
+
+
     return history[type]
-        .includes(value);
+        .some(item =>
+            normalize(item) === normalizedValue
+        );
 
 }
 
@@ -59,14 +88,29 @@ function markUsed(type,value){
         loadHistory();
 
 
-    history[type].push(value);
+    const normalizedValue =
+        normalize(value);
+
+
+    if(!history[type].includes(normalizedValue)){
+
+        history[type].push(
+            normalizedValue
+        );
+
+    }
 
 
     saveHistory(history);
 
 }
 
+
+
 module.exports = {
+
     wasUsed,
+
     markUsed
+
 };

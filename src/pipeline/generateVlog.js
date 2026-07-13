@@ -19,16 +19,16 @@ const uploadVideo = require("../youtube/youtubeUploader.js");
 const convertHeicFiles = require("../timeline/heicConverter");
 const cleanUploadsFolder = require("../timeline/cleanup");
 
-async function generateVlog(options = {}) {
+async function generateVlog(jobFolder, jobId) {
     console.log("");
     console.log("📼 Vlog Maker");
     console.log("");
 
-    convertHeicFiles(config.uploadsFolder);
+    const uploadsFolder = jobFolder || config.uploadsFolder;
 
-    let media = scanFolder(
-        options.uploadsFolder || config.uploadsFolder
-    );
+    convertHeicFiles(uploadsFolder);
+
+    let media = scanFolder(uploadsFolder);
 
     const endingBlack = {
         fullPath: path.join(
@@ -46,6 +46,11 @@ async function generateVlog(options = {}) {
         media,
         config
     );
+
+    console.log("TIMELINE:");
+    timeline.forEach((item, i) => {
+        console.log(`[${i}] type=${item.type} duration=${item.duration} file=${item.fileName}`);
+    });
 
     console.log("Timeline ready.");
     console.log("");

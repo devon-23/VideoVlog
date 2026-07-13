@@ -10,6 +10,10 @@ function escapeDrawtext(text) {
         .replace(/'/g, "\u2019")   // swap straight apostrophe for typographic one — sidesteps escaping entirely
         .replace(/\\/g, "\\\\")    // backslash
         .replace(/:/g, "\\:")      // colon (option separator)
+        .replace(/,/g, "\\,")
+        .replace(/\?/g, "\\?")
+        .replace(/[’‘]/g,"'")
+        .replace(/[“”]/g,'"')
         .replace(/%/g, "\\%");     // percent (drawtext expansion char)
 }
 

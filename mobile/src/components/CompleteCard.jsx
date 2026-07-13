@@ -7,22 +7,24 @@ return (
 
 
 <h2>
-🎉 Complete!
+Reel developed
 </h2>
 
 
 <p>
-Your vlog is ready.
+Your vlog is ready and uploaded.
 </p>
 
 
 <button
 
+className="shutter-btn"
+
 onClick={reset}
 
 >
 
-Create Another
+Create another
 
 </button>
 

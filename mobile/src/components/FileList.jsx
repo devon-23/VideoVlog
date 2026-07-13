@@ -3,11 +3,11 @@ function FileList({files}){
 
 return (
 
-<div className="card">
+<div className="card filelist">
 
 
 <h3>
-Selected Clips
+Contact sheet · {files.length} {files.length === 1 ? "clip" : "clips"}
 </h3>
 
 
@@ -15,13 +15,18 @@ Selected Clips
 
 files.map((file,index)=>(
 
-<div 
-    className="file"
+<div
+    className="frame"
     key={index}
 >
 
-🎥 {file.name}
+    <span className="frame-index">
+        {String(index + 1).padStart(2, "0")}
+    </span>
 
+    <span className="frame-name">
+        {file.name}
+    </span>
 
 </div>
 

@@ -23,9 +23,9 @@ function getRandomQuote(){
         });
 
     if(available.length === 0){
-
-        available = quotes;
-
+        throw new Error(
+            "No unused quotes remaining"
+        );
     }
 
     const quote =

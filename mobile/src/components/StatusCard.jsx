@@ -3,7 +3,7 @@ function StatusCard({status}){
 
 return (
 
-<div className="card">
+<div className="card status-card">
 
 
 <h3>
@@ -11,13 +11,20 @@ Status
 </h3>
 
 
-<p>
+<div className="status-row">
 
-{
-status.stage
-}
+    <span className="tally-light" aria-hidden="true" />
 
-</p>
+    <span className="stage">
+        {status.stage}
+    </span>
+
+</div>
+
+
+<div className="filmstrip-track" aria-hidden="true">
+    <span className="scan" />
+</div>
 
 
 </div>

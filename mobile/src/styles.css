@@ -1,5 +1,5 @@
 /* ============================================================
-   VideoVlog â€” "Darkroom" design system
+   VideoVlog — "Darkroom" design system
    Concept: a light table where today's reel gets developed.
    Paper contact-sheet cards sit on a near-black table; a red
    safelight marks anything mid-process, amber marks results.
@@ -133,14 +133,28 @@ body {
 .upload-card .dropzone {
   border: 1.5px dashed var(--paper-line);
   border-radius: var(--radius);
-  padding: 28px 16px;
+  padding: 40px 16px;
   text-align: center;
   margin-bottom: 18px;
-  transition: border-color 0.15s ease;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
 }
 
-.upload-card .dropzone:focus-within {
+.upload-card .dropzone:focus-within,
+.upload-card .dropzone:focus-visible {
   border-color: var(--safelight);
+  outline: none;
+}
+
+.upload-card .dropzone.dragging {
+  border-color: var(--safelight);
+  border-style: solid;
+  background: rgba(179, 58, 46, 0.06);
+  transform: scale(1.01);
+}
+
+.upload-card .dropzone.dragging .dropzone-label {
+  color: var(--safelight);
 }
 
 .upload-card .dropzone-label {
@@ -149,6 +163,7 @@ body {
   font-size: 12px;
   color: var(--muted);
   margin-bottom: 12px;
+  pointer-events: none;
 }
 
 .upload-card input[type="file"] {
