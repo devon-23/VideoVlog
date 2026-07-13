@@ -13,7 +13,6 @@ const IMAGE_EXTENSIONS = [
     ".jpg",
     ".jpeg",
     ".png",
-    ".heic",
     ".gif"
 ];
 function scanFolder(folder) {

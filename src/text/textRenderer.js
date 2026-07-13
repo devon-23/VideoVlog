@@ -23,18 +23,18 @@ function addText(video, textTimeline, output) {
 
             const input = index === 0 ? "[0:v]" : `[v${index - 1}]`;
 
-            const fontsize = item.type === "date" ? 40 : 60;
+            const fontsize = item.type === "date" ? 70 : 90;
             const position = getPosition(item.position);
 
             const enableExpr = `'between(t,${item.start},${item.end})'`;
 
             const drawtext = [
                 `drawtext=text=${escapeDrawtext(item.text)}`,   // <-- no surrounding quotes
-                `fontfile=/System/Library/Fonts/Supplemental/Arial.ttf`,
+                `fontfile='\\/System\\/Library\\/Fonts\\/Supplemental\\/DIN Alternate Bold.ttf':`,
                 `fontsize=${fontsize}`,
                 `fontcolor=white`,
-                `borderw=2`,
-                `bordercolor=black`,
+                //`borderw=2`,
+                //`bordercolor=black`,
                 `x=${position.x}`,
                 `y=${position.y}`,
                 `enable=${enableExpr}`   // this one was already working fine, leave as-is

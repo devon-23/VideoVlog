@@ -1,28 +1,173 @@
 [
     {
         "sections": [
-            "Oh come on dance with me",
-            "The earth is spinning",
-            "We can't just stand on it"
+            "All women become",
+            "like their mothers",
+            "That is their tragedy",
+            "No man does",
+            "and that is his"
         ],
-        "vibe": "adventure"
+        "vibe": "wry"
     },
-
     {
         "sections": [
-            "Maybe the little things",
-            "were the big things",
-            "all along"
+            "We look at the world once",
+            "in childhood",
+            "The rest is memory"
         ],
         "vibe": "nostalgia"
     },
-
     {
         "sections": [
-            "We are all just",
-            "trying to find",
-            "somewhere to belong"
+            "People have beautiful things",
+            "to say about you",
+            "but you must die first"
         ],
-        "vibe": "reflection"
+        "vibe": "melancholy"
+    },
+    {
+        "sections": [
+            "You don't have a soul",
+            "You are a soul",
+            "You have a body"
+        ],
+        "vibe": "reflective"
+    },
+    {
+        "sections": [
+            "Plants are more courageous",
+            "than almost all human beings",
+            "an orange tree would rather die",
+            "than produce lemons",
+            "whereas instead of dying",
+            "the average person",
+            "would rather be someone they are not"
+        ],
+        "vibe": "reflective"
+    },
+    {
+        "sections": [
+            "you had fun",
+            "because you are fun",
+            "you felt loved",
+            "because you are love",
+            "it was beautiful",
+            "because you saw it that way",
+            "everything you need",
+            "is already within you"
+        ],
+        "vibe": "affirmation"
+    },
+    {
+        "sections": [
+            "Allow yourself to be",
+            "everything that you want to be"
+        ],
+        "vibe": "affirmation"
+    },
+    {
+        "sections": [
+            "Always be a bit",
+            "kinder than necessary"
+        ],
+        "vibe": "gentle"
+    },
+    {
+        "sections": [
+            "The reason you want it so bad",
+            "is because your future self",
+            "already has it"
+        ],
+        "vibe": "affirmation"
+    },
+    {
+        "sections": [
+            "I never regret being kind",
+            "but I have regretted",
+            "every moment I wasn't"
+        ],
+        "vibe": "reflective"
+    },
+    {
+        "sections": [
+            "You have to be odd",
+            "to be number 1"
+        ],
+        "vibe": "quirky"
+    },
+    {
+        "sections": [
+            "You are never going to feel ready",
+            "because ready is not a feeling",
+            "it is a decision"
+        ],
+        "vibe": "affirmation"
+    },
+    {
+        "sections": [
+            "Better to admit",
+            "you walked through the wrong door",
+            "rather than spending your whole life",
+            "in the wrong room"
+        ],
+        "vibe": "reflective"
+    },
+    {
+        "sections": [
+            "You can't unlock a new door",
+            "if your hands are full",
+            "of old keys"
+        ],
+        "vibe": "reflective"
+    },
+    {
+        "sections": [
+            "Somewhere",
+            "a dog barked"
+        ],
+        "vibe": "quiet"
+    },
+    {
+        "sections": [
+            "Every song ends",
+            "is that any reason",
+            "not to enjoy the music?"
+        ],
+        "vibe": "nostalgia"
+    },
+    {
+        "sections": [
+            "There was beautiful music",
+            "everywhere"
+        ],
+        "vibe": "nostalgia"
+    },
+    {
+        "sections": [
+            "late august angst and a pointless night",
+            "the feeling of being alive",
+            "for the first time in a long time"
+        ],
+        "vibe": "reflective"
+    }
+    ,
+    {
+        "sections": [
+            "and we're so alone",
+            "most of the time",
+            "we don't have anyone",
+            "where do we go, when we die?",
+            "i wouldn't mind right here",
+            "i wouldn't mind at all."
+        ],
+        "vibe": "reflective"
+    },
+    {
+        "sections": [
+            "The world is full of magic",
+            "things patiently waiting",
+            "for our senses to grow sharper"
+        ],
+        "vibe": "reflective"
     }
 ]

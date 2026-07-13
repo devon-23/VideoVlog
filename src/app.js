@@ -16,6 +16,7 @@ const generateTitle = require("./titles/titleGenerator");
 const writeManifest = require("./project/writeManifest");
 const getCreationDate = require("./timeline/getCreationDate");
 const uploadVideo = require("./youtube/youtubeUploader.js");
+const convertHeicFiles = require("./timeline/heicConverter");
 
 async function main() {
 
@@ -25,6 +26,8 @@ async function main() {
 
     console.log("");
 
+
+    convertHeicFiles(config.uploadsFolder);
 
     const media = scanFolder(
         config.uploadsFolder
@@ -75,6 +78,11 @@ async function main() {
         config.musicFolder
     );
 
+    // Get the real date from photo/video metadata
+
+    const rawDate = await getCreationDate(media);
+    const vlogDate = createDateText(rawDate);
+
     // Pick quote
 
     const quote = getRandomQuote();
@@ -84,8 +92,9 @@ async function main() {
         quote.text
     );
 
-    //make video title
-    const videoTitle = generateTitle();
+    // make video title — using the real metadata date, not today's date
+
+    const videoTitle = generateTitle(new Date(rawDate));
 
     console.log(
         "Video title:",
@@ -139,20 +148,17 @@ async function main() {
         duration
     );
 
-    //const date = createDateText(vlogDate);
-    const rawDate = await getCreationDate(media); // media, not media.files
-    const vlogDate = createDateText(rawDate);     // format it as MM/DD/YYYY
 
     const sections = quote.sections;
 
     console.log("QUOTE:");
-console.log(quote);
+    console.log(quote);
 
-console.log("SECTIONS:");
-console.log(sections);
+    console.log("SECTIONS:");
+    console.log(sections);
 
-console.log("DATE VALUE:", vlogDate);
-console.log("DATE TYPE:", typeof vlogDate);
+    console.log("DATE VALUE:", vlogDate);
+    console.log("DATE TYPE:", typeof vlogDate);
 
     const textTimeline =
     buildTextTimeline(
@@ -181,37 +187,37 @@ console.log("DATE TYPE:", typeof vlogDate);
         "vlog.mp4"
     );
 
-const endingVideo =
-path.join(
-    config.outputFolder,
-    "ending.mp4"
-);
+    const endingVideo =
+    path.join(
+        config.outputFolder,
+        "ending.mp4"
+    );
 
 
-await addEnding(
-    textVideo,
-    config.endingVideo,
-    endingVideo
-);
+    await addEnding(
+        textVideo,
+        config.endingVideo,
+        endingVideo
+    );
 
-const finalOutput =
-path.join(
-    config.outputFolder,
-    "vlog.mp4"
-);
+    const finalOutput =
+    path.join(
+        config.outputFolder,
+        "vlog.mp4"
+    );
 
-const quoteSections = quote.sections;
+    const quoteSections = quote.sections;
 
-const finalQuote =
-    quoteSections[
-        quoteSections.length - 1
-    ];
+    const finalQuote =
+        quoteSections[
+            quoteSections.length - 1
+        ];
 
-await addEndingText(
-    endingVideo,
-    finalQuote,
-    finalOutput
-);
+    await addEndingText(
+        endingVideo,
+        finalQuote,
+        finalOutput
+    );
 
     /*
        Upload to YouTube
@@ -222,7 +228,6 @@ await addEndingText(
         videoTitle,
         sections.join("\n")
     );
-
 
     console.log(
         "🎬 Uploaded:",

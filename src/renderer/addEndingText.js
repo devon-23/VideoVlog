@@ -9,11 +9,11 @@ function addEndingText(video, quote, output){
         const filter = 
         `[0:v]drawtext=` +
         `text='${quote}':` +
-        `fontfile='\\/System\\/Library\\/Fonts\\/Supplemental\\/Arial.ttf':` +
-        `fontsize=60:` +
+        `fontfile='\\/System\\/Library\\/Fonts\\/Supplemental\\/DIN Alternate Bold.ttf':` +
+        `fontsize=110:` +
         `fontcolor=white:` +
-        `borderw=1:` +
-        `bordercolor=black:` +
+        //`borderw=1:` +
+        //`bordercolor=black:` +
         `x=(w-text_w)/2:` +
         `y=(h-text_h)/2` +
         `[outv]`;

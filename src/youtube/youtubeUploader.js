@@ -59,7 +59,7 @@ async function uploadVideo(videoPath, title, description) {
                 ]
             },
             status: {
-                privacyStatus: "private"
+                privacyStatus: "public"
             }
         },
         media: {
