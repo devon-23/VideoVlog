@@ -1,59 +1,90 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+import UploadCard from "./components/UploadCard";
+import FileList from "./components/FileList";
+import StatusCard from "./components/StatusCard";
+import CompleteCard from "./components/CompleteCard";
 
 
-function App() {
+function App(){
 
-    const [files, setFiles] = useState([]);
+    const [files,setFiles] = useState([]);
 
-    const [status, setStatus] = useState({
-        status: "idle",
-        stage: "Ready"
+    const [status,setStatus] = useState({
+
+        status:"idle",
+
+        stage:"Ready"
+
     });
 
 
-    useEffect(() => {
+    const fileInput = useRef(null);
+
+
+
+    useEffect(()=>{
+
 
         const events = new EventSource(
             "http://localhost:3000/events"
         );
 
 
-        events.onmessage = (event) => {
+        events.onmessage = (event)=>{
 
-            const data = JSON.parse(event.data);
+            const data =
+                JSON.parse(event.data);
 
-            console.log("STATUS UPDATE:", data);
+
+            console.log(
+                "STATUS:",
+                data
+            );
+
 
             setStatus(data);
 
         };
 
 
-        return () => {
+        return ()=>{
+
             events.close();
+
         };
 
 
-    }, []);
+    },[]);
 
 
 
-    function handleFiles(e){
 
-        setFiles(
-            Array.from(e.target.files)
-        );
+    function handleFiles(event){
+
+        const selected =
+            Array.from(
+                event.target.files
+            );
+
+
+        setFiles(selected);
 
     }
 
 
 
+
+
     async function upload(){
 
-        const form = new FormData();
+
+        const form =
+            new FormData();
 
 
-        files.forEach(file => {
+
+        files.forEach(file=>{
 
             form.append(
                 "media",
@@ -61,6 +92,7 @@ function App() {
             );
 
         });
+
 
 
         await fetch(
@@ -71,48 +103,109 @@ function App() {
             }
         );
 
+
+
+        // clear selected files
+
+        setFiles([]);
+
+
+        if(fileInput.current){
+
+            fileInput.current.value="";
+
+        }
+
+
     }
+
+
+
+
+    function reset(){
+
+
+        setStatus({
+
+            status:"idle",
+
+            stage:"Ready"
+
+        });
+
+
+        setFiles([]);
+
+    }
+
 
 
 
     return (
 
-        <div>
+        <div className="app">
+
 
             <h1>
                 📼 VideoVlog
             </h1>
 
 
-            <h3>
-                Create today's vlog
-            </h3>
-
-
-            <h2>
-                {status.stage}
-            </h2>
-
-
-            <input
-                type="file"
-                accept="video/*,image/*"
-                multiple
-                onChange={handleFiles}
-            />
-
-
-            <p>
-                {files.length} files selected
+            <p className="subtitle">
+                Turn today's clips into a story
             </p>
 
 
-            <button
-                onClick={upload}
-                disabled={!files.length}
-            >
-                Create Vlog
-            </button>
+
+            {
+                status.status === "complete"
+                ?
+
+                <CompleteCard
+                    reset={reset}
+                />
+
+                :
+
+                <>
+
+
+                <UploadCard
+
+                    fileInput={fileInput}
+
+                    handleFiles={handleFiles}
+
+                    upload={upload}
+
+                    disabled={
+                        files.length===0
+                    }
+
+                />
+
+
+
+                {
+                    files.length > 0 &&
+                    <FileList
+                        files={files}
+                    />
+                }
+
+
+
+                <StatusCard
+
+                    status={status}
+
+                />
+
+
+                </>
+
+
+            }
 
 
         </div>
