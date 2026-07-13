@@ -8,6 +8,10 @@ const app = express();
 
 const PORT = 3000;
 
+const {
+    updateJob
+} = require("../jobs/jobState");
+
 app.get("/", (req, res) => {
     res.send("VideoVlog server is running");
 });
@@ -50,6 +54,10 @@ app.post(
     "/upload",
     upload.array("media"),
     async (req,res)=>{
+        updateJob({
+            status:"uploading",
+            stage:"Receiving videos..."
+        });
         console.log(
             "📱 Files received:",
             req.files.length
@@ -82,7 +90,15 @@ app.post(
                 "Job folder:",
                 jobFolder
             );
+            updateJob({
+                status:"uploading",
+                stage:`Received ${req.files.length} videos`
+            });
             try {
+                updateJob({
+                    status:"processing",
+                    stage:"Creating vlog..."
+                });
                 const result =
                     await generateVlog({
                         uploadsFolder: jobFolder
@@ -90,6 +106,10 @@ app.post(
                 res.json({
                     success:true,
                     result
+                });
+                updateJob({
+                    status:"complete",
+                    stage:"Vlog complete 🎉"
                 });
             }
             finally {
@@ -131,5 +151,62 @@ app.get("/status",(req,res)=>{
         service:"VideoVlog"
 
     });
+
+});
+
+app.get("/status/:id",(req,res)=>{
+
+    const {
+        getJob
+    } = require("../jobs/jobTracker");
+
+
+    const job =
+        getJob(req.params.id);
+
+
+    res.json(
+        job || {
+            error:"Job not found"
+        }
+    );
+
+});
+
+const {
+    subscribe,
+    getJob
+} = require("../jobs/jobState");
+
+
+app.get("/events",(req,res)=>{
+
+    res.setHeader(
+        "Access-Control-Allow-Origin",
+        "http://localhost:5173"
+    );
+
+    res.setHeader(
+        "Content-Type",
+        "text/event-stream"
+    );
+
+    res.setHeader(
+        "Cache-Control",
+        "no-cache"
+    );
+
+    res.setHeader(
+        "Connection",
+        "keep-alive"
+    );
+
+
+    res.write(
+        `data: ${JSON.stringify(getJob())}\n\n`
+    );
+
+
+    subscribe(res);
 
 });
