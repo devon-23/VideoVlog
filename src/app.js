@@ -15,7 +15,7 @@ const getRandomQuote = require("./quotes/quoteSelector");
 const generateTitle = require("./titles/titleGenerator");
 const writeManifest = require("./project/writeManifest");
 const getCreationDate = require("./timeline/getCreationDate");
-
+const uploadVideo = require("./youtube/youtubeUploader.js");
 
 async function main() {
 
@@ -213,9 +213,21 @@ await addEndingText(
     finalOutput
 );
 
-    console.log("");
-    console.log("🎉 Done!");
-    console.log(finalVideo);
+    /*
+       Upload to YouTube
+    */
+
+    const youtubeId = await uploadVideo(
+        finalOutput,
+        videoTitle,
+        sections.join("\n")
+    );
+
+
+    console.log(
+        "🎬 Uploaded:",
+        youtubeId
+    );
 
 }
 
