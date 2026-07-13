@@ -7,14 +7,14 @@ const getPosition = require("./textPosition");
 // Escape text for safe use inside a single-quoted drawtext text value
 function escapeDrawtext(text) {
     return String(text)
-        .replace(/'/g, "\u2019")   // swap straight apostrophe for typographic one — sidesteps escaping entirely
-        .replace(/\\/g, "\\\\")    // backslash
-        .replace(/:/g, "\\:")      // colon (option separator)
-        .replace(/,/g, "\\,")
-        .replace(/\?/g, "\\?")
-        .replace(/[’‘]/g,"'")
-        .replace(/[“”]/g,'"')
-        .replace(/%/g, "\\%");     // percent (drawtext expansion char)
+        .replace(/[’‘]/g, "'")      // normalize any existing curly single quotes to straight, first
+        .replace(/[“”]/g, '"')      // normalize any existing curly double quotes to straight
+        .replace(/\\/g, "\\\\")     // backslash
+        .replace(/:/g, "\\:")       // colon (option separator)
+        .replace(/,/g, "\\,")       // comma
+        .replace(/\?/g, "\\?")      // question mark
+        .replace(/%/g, "\\%")       // percent (drawtext expansion char)
+        .replace(/'/g, "\u2019");   // swap the now-normalized straight apostrophe → curly, LAST
 }
 
 function addText(video, textTimeline, output) {
