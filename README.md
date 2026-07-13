@@ -1,189 +1,314 @@
-# 🎬 VideoVlog
+# 📼 VideoVlog
 
-An automated cinematic daily vlog generator.
+An automated daily vlog generator that turns raw phone clips into a finished YouTube vlog.
 
-VideoVlog takes a folder of clips recorded throughout your day and turns them into a finished YouTube Short with almost no editing required. Instead of opening Premiere Pro or CapCut every evening, the goal is to drop in your clips, click **Generate**, and let the app build the entire video for you.
+VideoVlog handles:
 
-The finished video includes:
+- 📱 Mobile video uploads
+- 🎬 Automatic clip combining
+- 🎵 Music selection
+- ✍️ Quote generation
+- 📝 Dynamic text rendering
+- 🖤 Cinematic ending screen
+- 🏷️ Automatic vlog titles
+- ▶️ YouTube uploading
 
-* 📱 Every uploaded clip (no trimming)
-* 🖼️ Automatic support for photos (displayed for a few seconds)
-* 🎥 Landscape video with intelligent cropping for vertical phone footage
-* 🎵 Random royalty-free instrumental music
-* 📅 Date overlay based on the media's creation metadata
-* 💬 A unique quote displayed section-by-section throughout the video
-* ⬛ A cinematic black ending screen with the final quote lingering
-* 📝 Automatically generated YouTube title (`#001`, `#177`, etc.)
-* 🧠 Quote and title history to prevent duplicates
-* 📄 `vlog.json` manifest for every generated video
-* ☁️ *(In Progress)* Automatic YouTube upload
+
+## Overview
+
+The goal of VideoVlog is to remove the friction of creating daily memories.
+
+Instead of manually editing videos:
+
+```
+Record clips
+      ↓
+Upload
+      ↓
+VideoVlog processes everything
+      ↓
+Finished vlog uploaded
+```
+
 
 ---
 
-# Example
-
-Input:
-
-```text
-IMG_1023.MOV
-IMG_1024.MOV
-IMG_1025.MOV
-```
-
-Output:
+# Architecture
 
 ```
-📅 07/12/2026
+                 iPhone App
+                     |
+                     |
+                     v
 
+              Node.js Server
+                     |
+        ---------------------------
+        |            |            |
+        v            v            v
+
+   Media Scanner   Timeline    Quote Engine
+
+                     |
+                     v
+
+              FFmpeg Pipeline
+
+                     |
+                     v
+
+              Final Vlog.mp4
+
+                     |
+                     v
+
+              YouTube Upload
+```
+
+
+---
+
+# Pipeline Flow
+
+## 1. Upload
+
+User selects videos from the mobile app.
+
+The app sends:
+
+```
+POST /upload
+```
+
+The server creates a unique job:
+
+```
+jobs/
+ └── 1783956301227/
+       ├── IMG_1625.mov
+       ├── IMG_1630.mov
+       └── IMG_1636.mov
+```
+
+
+---
+
+## 2. Metadata Extraction
+
+Video metadata is scanned.
+
+VideoVlog determines:
+
+- Recording date
+- Clip order
+- Total duration
+
+
+The vlog date comes from the original media creation date.
+
+
+---
+
+## 3. Timeline Generation
+
+The system creates a timeline:
+
+Example:
+
+```
+00:00 - clip 1
+00:04 - clip 2
+00:09 - quote appears
+00:15 - ending screen
+```
+
+
+---
+
+## 4. Quote Generation
+
+Quotes are selected from:
+
+```
+quotes.json
+```
+
+Previously used quotes are tracked:
+
+```
+history/
+ └── used.json
+```
+
+
+Example:
+
+```json
+{
+  "sections":[
+    "Maybe the little things",
+    "were the big things",
+    "all along"
+  ],
+  "vibe":"nostalgia"
+}
+```
+
+
+---
+
+## 5. Text Rendering
+
+FFmpeg dynamically adds:
+
+- date
+- quote sections
+- changing positions
+
+Example:
+
+```
 Maybe the little things
 
-↓
-
-were the big things
-
-↓
+       were the big things
 
 all along
-
-↓
-
-⬛
-all along
 ```
 
-Title:
-
-```
-(don't) look back in anger #193
-```
 
 ---
 
-# How It Works
+## 6. Ending Screen
 
-```text
-📱 Upload clips
-        │
-        ▼
-🔍 Scan media folder
-        │
-        ▼
-📅 Read metadata
-(determine actual recording date)
-        │
-        ▼
-🔢 Calculate day of year
-(#001 - #365)
-        │
-        ▼
-💬 Select unused quote
-        │
-        ▼
-🎵 Pick random instrumental
-        │
-        ▼
-🎞️ Build video timeline
-        │
-        ▼
-✂️ Crop & render clips
-        │
-        ▼
-📝 Overlay date + quote sections
-        │
-        ▼
-⬛ Append ending screen
-        │
-        ▼
-📄 Generate vlog.json
-        │
-        ▼
-🧠 Save used quote/title history
-        │
-        ▼
-☁️ Upload to YouTube
-```
-
----
-
-# Project Structure
+Every vlog receives the same ending:
 
 ```
-VideoVlog/
-
-src/
-├── metadata/
-├── music/
-├── quotes/
-├── renderer/
-├── text/
-├── timeline/
-├── youtube/
-├── history/
-├── titles/
-└── app.js
-
-uploads/
-music/
-output/
+black_screen.mov
 ```
 
----
+This creates consistency between daily uploads.
 
-# Current Features
-
-* ✅ Automatic media scanning
-* ✅ Landscape rendering
-* ✅ Photo support
-* ✅ Music selection
-* ✅ Metadata-based dates
-* ✅ Day-of-year title generation
-* ✅ Random quote selection
-* ✅ Quote history
-* ✅ Title history
-* ✅ Dynamic text timeline
-* ✅ Ending screen
-* ✅ Manifest generation
 
 ---
 
-# Planned Features
+## 7. Title Generation
 
-* [ ] Automatic YouTube upload
-* [ ] Vertical TikTok renderer
-* [ ] Drag-and-drop web interface
-* [ ] AI-generated descriptions
-* [ ] Automatic thumbnail generation
-* [ ] Music history (avoid repeats)
-* [ ] Weather/location metadata
-* [ ] Optional transitions between clips
-* [ ] Multiple visual themes
-* [ ] Scheduled uploads
+Each vlog receives:
+
+Example:
+
+```
+#193 — Maybe the little things
+```
+
+
+Used titles are tracked to prevent duplicates.
+
 
 ---
 
-# Philosophy
+# Running VideoVlog
 
-Life is mostly made of tiny moments that are easy to forget.
+## Backend
 
-This project exists to remove the friction from documenting those moments. Instead of spending time editing, the goal is to make creating a beautiful daily video as effortless as uploading your clips.
+Install:
 
-Take videos during the day.
+```
+npm install
+```
 
-Press one button.
 
-Go make coffee.
+Start:
 
-Come back to a finished vlog.
+```
+npm run server
+```
+
+
+Server:
+
+```
+localhost:3000
+```
+
+
+---
+
+## Mobile App
+
+
+```
+cd VideoVlogMobile
+
+npm install
+
+npx expo start
+```
+
+
+---
+
+## Start Everything
+
+From the root folder:
+
+```
+npm run dev
+```
+
+
+This starts:
+
+- Node backend
+- Expo mobile application
+
 
 ---
 
 # Tech Stack
 
-* Node.js
-* FFmpeg
-* Fluent-FFmpeg
-* ExifTool
-* Google YouTube Data API
+## Backend
 
-```
-```
+- Node.js
+- Express
+- FFmpeg
+- fluent-ffmpeg
+- YouTube API
+
+
+## Mobile
+
+- React Native
+- Expo
+
+
+## Media
+
+- FFmpeg
+- Metadata extraction
+
+
+---
+
+# Future Features
+
+- [x] Automated vlog generation
+- [x] Mobile uploads
+- [x] Quote history tracking
+- [x] Dynamic text overlays
+- [x] YouTube uploading
+
+Planned:
+
+- [ ] Live mobile progress screen
+- [ ] Cloud processing
+- [ ] Remote server hosting
+- [ ] AI generated titles
+- [ ] Multiple vlog styles
+
+
+---
+
+# Created By
+
+Devon

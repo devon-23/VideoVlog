@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
-    "server": "node src/server.js"
-  },
+  "start": "node src/app.js",
+  "page": "cd mobile && npm run dev",
+  "mobile": "cd VideoVlogMobile && npx expo start",
+  "dev": "concurrently --names \"SERVER,PAGE\" --prefix name \"npm run start\" \"npm run page\""
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devon-23/VideoVlog.git"
@@ -20,6 +22,7 @@
   },
   "homepage": "https://github.com/devon-23/VideoVlog#readme",
   "dependencies": {
+    "concurrently": "^10.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "exifr": "^7.1.3",
