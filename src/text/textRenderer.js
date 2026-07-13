@@ -30,7 +30,7 @@ function addText(video, textTimeline, output) {
 
             const drawtext = [
                 `drawtext=text=${escapeDrawtext(item.text)}`,   // <-- no surrounding quotes
-                `fontfile='\\/System\\/Library\\/Fonts\\/Supplemental\\/DIN Alternate Bold.ttf':`,
+                `fontfile='/System/Library/Fonts/Supplemental/DIN Alternate Bold.ttf'`,
                 `fontsize=${fontsize}`,
                 `fontcolor=white`,
                 //`borderw=2`,

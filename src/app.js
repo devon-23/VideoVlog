@@ -17,6 +17,7 @@ const writeManifest = require("./project/writeManifest");
 const getCreationDate = require("./timeline/getCreationDate");
 const uploadVideo = require("./youtube/youtubeUploader.js");
 const convertHeicFiles = require("./timeline/heicConverter");
+const cleanUploadsFolder = require("./timeline/cleanup");
 
 async function main() {
 
@@ -228,6 +229,8 @@ async function main() {
         videoTitle,
         sections.join("\n")
     );
+
+    cleanUploadsFolder(config.uploadsFolder, ["ending.mov"]);
 
     console.log(
         "🎬 Uploaded:",

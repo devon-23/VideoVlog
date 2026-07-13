@@ -53,6 +53,7 @@ function generateTitle(vlogDate) {
     "you guys go on without me",
     "idk what day it is",
     "and so on",
+    "coordination",
     "it was like the moon",
     "late movie backwards",
     "ivory and blue",
@@ -69,15 +70,32 @@ function generateTitle(vlogDate) {
     "not much happened, and that was kind of nice",
     "today, probably",
     "here's the day",
+    "non-linear",
+    "life out of order",
+    "dresden and its destruction",
+    "ignore the awful times",
+    "and concentrate on the good ones.",
+    "and so forth",
+    "it was alright",
+    "which was true",
+    "there they were",
+    "there is no why",
+    "the childrens crusade",
+    "vision vs. perception",
     "art is dead",
     "life is reason",
     "pnp",
+    "what an empty epitaph",
+    "oh my days",
+    "deju vu that hasn't happened yet",
     "nothing special, filmed anyway",
     "i'm not lost, I'm just plot twisting",
     "running on empty and vibes",
     "taking things one take at a time",
     "i peaked in the establishing shot",
     "currently buffering",
+    "chud maxxing",
+    "never really understand it",
     "coffee first, thoughts later",
     "did things, felt things, filmed things",
     "an unremarkable day, remarked upon anyway",
@@ -92,7 +110,10 @@ function generateTitle(vlogDate) {
     "living in echos",
     "tour tour tour",
     "pause",
+    "can't be choosers",
     "moggin on the daily",
+    "pack all of our things",
+    "never be the cure",
     "some days are just a bridge with no chorus",
     "i called it a season, it called itself a phase",
     "is this thing on?",
@@ -100,18 +121,18 @@ function generateTitle(vlogDate) {
 ];
 
     
-    let title;
+    let baseTitle;
     let attempts = 0;
-    const maxAttempts = titles.length * 3; // generous, but finite
+    const maxAttempts = titles.length * 3;
 
     do {
-        const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-        title = `${randomTitle} #${dayNumber}`;
+        baseTitle = titles[Math.floor(Math.random() * titles.length)];
         attempts++;
-    } while (wasUsed("titles", title) && attempts < maxAttempts);
+    } while (wasUsed("titles", baseTitle) && attempts < maxAttempts);
 
-    markUsed("titles", title);
-    return title;
+    markUsed("titles", baseTitle);
+
+    return `${baseTitle} #${dayNumber}`;
 }
 
 
