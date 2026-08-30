@@ -5,7 +5,7 @@ const path = require("path");
 const historyFile =
     path.join(
         __dirname,
-        "../../videovlog/history/used.json"
+        "used.json"
     );
 
 

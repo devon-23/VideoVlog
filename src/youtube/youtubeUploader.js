@@ -43,29 +43,41 @@ async function uploadVideo(videoPath, title, description) {
         auth
     });
 
-    const response = await youtube.videos.insert({
-        part: [
-            "snippet",
-            "status"
-        ],
-        requestBody: {
-            snippet: {
-                title: title,
-                description: description,
-                tags: [
-                    "vlog",
-                    "daily vlog",
-                    "memories"
-                ]
+    let response;
+
+    try {
+        response = await youtube.videos.insert({
+            part: [
+                "snippet",
+                "status"
+            ],
+            requestBody: {
+                snippet: {
+                    title: title,
+                    description: description,
+                    tags: [
+                        "vlog",
+                        "daily vlog",
+                        "memories"
+                    ]
+                },
+                status: {
+                    privacyStatus: "public"
+                }
             },
-            status: {
-                privacyStatus: "public"
+            media: {
+                body: fs.createReadStream(videoPath)
             }
-        },
-        media: {
-            body: fs.createReadStream(videoPath)
+        });
+    } catch (err) {
+        if (err.response?.data?.error === "invalid_grant" || err.code === 401) {
+            throw new Error(
+                "YouTube sign-in expired. Run `npm run reauth` on your computer, then try uploading again."
+            );
         }
-    });
+
+        throw err;
+    }
 
     console.log("Uploaded:", response.data.id);
 

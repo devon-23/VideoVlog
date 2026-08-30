@@ -1,44 +1,84 @@
 const fs = require("fs");
-const readline = require("readline");
+const http = require("http");
+const { exec } = require("child_process");
 const { google } = require("googleapis");
 
 const credentials = JSON.parse(
     fs.readFileSync("credentials.json", "utf8")
 );
-console.log("Loaded client_id:", credentials.installed.client_id);
-const { client_id, client_secret, redirect_uris } = credentials.installed;
-
-const oAuth2Client = new google.auth.OAuth2(
-    client_id,
-    client_secret,
-    redirect_uris ? redirect_uris[0] : "urn:ietf:wg:oauth:2.0:oob"
-);
+const { client_id, client_secret } = credentials.installed;
 
 const SCOPES = ["https://www.googleapis.com/auth/youtube.upload"];
 
-const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: SCOPES,
-    prompt: "consent"
+let oAuth2Client;
+let redirectUri;
+
+const server = http.createServer(async (req, res) => {
+    const url = new URL(req.url, "http://localhost");
+
+    if (url.pathname !== "/") {
+        res.writeHead(404).end();
+        return;
+    }
+
+    const code = url.searchParams.get("code");
+    const error = url.searchParams.get("error");
+
+    if (error) {
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.end("<h2>Authorization denied. You can close this tab.</h2>");
+        console.error("Authorization denied:", error);
+        server.close();
+        process.exit(1);
+    }
+
+    if (!code) {
+        res.writeHead(400).end();
+        return;
+    }
+
+    res.writeHead(200, { "Content-Type": "text/html" });
+    res.end("<h2>YouTube authorized. You can close this tab.</h2>");
+
+    server.close();
+
+    try {
+        const { tokens } = await oAuth2Client.getToken({
+            code,
+            redirect_uri: redirectUri
+        });
+
+        fs.writeFileSync("./token.json", JSON.stringify(tokens, null, 2));
+        console.log("✅ Token stored to token.json");
+        process.exit(0);
+    } catch (err) {
+        console.error("Error retrieving access token:", err.message);
+        process.exit(1);
+    }
 });
 
-console.log("Authorize this app by visiting this url:\n", authUrl);
+server.listen(0, () => {
+    const port = server.address().port;
+    redirectUri = `http://localhost:${port}`;
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+    oAuth2Client = new google.auth.OAuth2(
+        client_id,
+        client_secret,
+        redirectUri
+    );
 
-rl.question("\nPaste the code from that page here: ", (code) => {
-    rl.close();
+    const authUrl = oAuth2Client.generateAuthUrl({
+        access_type: "offline",
+        scope: SCOPES,
+        prompt: "consent"
+    });
 
-    oAuth2Client.getToken(code, (err, token) => {
+    console.log("Opening browser to authorize YouTube access...");
+    console.log("If it doesn't open automatically, visit:\n", authUrl);
+
+    exec(`open "${authUrl}"`, (err) => {
         if (err) {
-            console.error("Error retrieving access token", err);
-            return;
+            console.log("\nCouldn't auto-open a browser — copy the URL above into one manually.");
         }
-
-        fs.writeFileSync("./token.json", JSON.stringify(token, null, 2));
-        console.log("Token stored to token.json");
     });
 });
