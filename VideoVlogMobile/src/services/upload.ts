@@ -31,12 +31,7 @@ export async function uploadVideos(videos:any[]) {
             `${SERVER}/upload`,
             {
                 method:"POST",
-                body:formData,
-
-                headers:{
-                    "Content-Type":
-                        "multipart/form-data"
-                }
+                body:formData
             }
         );
 

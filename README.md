@@ -221,7 +221,7 @@ npm install
 Start:
 
 ```
-npm run server
+npm start
 ```
 
 

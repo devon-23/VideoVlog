@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
   "start": "node src/app.js",
-  "page": "cd mobile && npm run dev",
   "mobile": "cd VideoVlogMobile && npx expo start",
-  "dev": "concurrently --names \"SERVER,PAGE\" --prefix name \"npm run start\" \"npm run page\""
+  "dev": "concurrently --names \"SERVER,MOBILE\" --prefix name \"npm run start\" \"npm run mobile\""
 },
   "repository": {
     "type": "git",

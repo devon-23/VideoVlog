@@ -533,7 +533,8 @@ function generateTitle(vlogDate) {
     "the impossible afternoon",
     "the universe said maybe",
     "still not banned",
-    "the road to the rivoli"
+    "the road to the rivoli",
+    "delusional ambition"
 ];
 
     

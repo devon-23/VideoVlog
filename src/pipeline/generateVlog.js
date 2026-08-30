@@ -182,28 +182,6 @@ async function generateVlog(jobFolder, jobId) {
         textVideo
     );
 
-    const addEnding = require("../renderer/addEnding");
-
-    const completedVideo =
-    path.join(
-        config.outputFolder,
-        "vlog.mp4"
-    );
-
-    
-    const endingVideo =
-    path.join(
-        config.outputFolder,
-        "ending.mp4"
-    );
-
-
-    await addEnding(
-        textVideo,
-        config.endingVideo,
-        endingVideo
-    );
-
     const finalOutput =
     path.join(
         config.outputFolder,
@@ -218,7 +196,7 @@ async function generateVlog(jobFolder, jobId) {
         ];
 
     await addEndingText(
-        endingVideo,
+        textVideo,
         finalQuote,
         finalOutput
     );
@@ -233,7 +211,7 @@ async function generateVlog(jobFolder, jobId) {
         sections.join("\n")
     );
 
-    cleanUploadsFolder(config.uploadsFolder, ["ending.mov"]);
+    cleanUploadsFolder(uploadsFolder, ["ending.mov"]);
 
     console.log(
         "🎬 Uploaded:",
