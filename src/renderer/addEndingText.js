@@ -1,21 +1,24 @@
 const ffmpeg = require("fluent-ffmpeg");
+const { escapeDrawtext } = require("../text/textRenderer");
 
 
-function addEndingText(video, quote, output){
+function addEndingText(video, quote, output, startTime, endTime){
 
     return new Promise((resolve,reject)=>{
 
+        const enableExpr = `between(t\\,${startTime}\\,${endTime})`;
 
-        const filter = 
+        const filter =
         `[0:v]drawtext=` +
-        `text='${quote}':` +
+        `text=${escapeDrawtext(quote)}:` +
         `fontfile='\\/System\\/Library\\/Fonts\\/Supplemental\\/DIN Alternate Bold.ttf':` +
         `fontsize=110:` +
         `fontcolor=white:` +
         //`borderw=1:` +
         //`bordercolor=black:` +
         `x=(w-text_w)/2:` +
-        `y=(h-text_h)/2` +
+        `y=(h-text_h)/2:` +
+        `enable='${enableExpr}'` +
         `[outv]`;
 
 

@@ -81,3 +81,4 @@ function addText(video, textTimeline, output) {
 }
 
 module.exports = addText;
+module.exports.escapeDrawtext = escapeDrawtext;

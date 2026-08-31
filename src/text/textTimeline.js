@@ -1,4 +1,4 @@
-function buildTextTimeline(date, quoteSections, duration) {
+function buildTextTimeline(date, quoteSections, duration, endingStart) {
 
     const timeline = [];
 
@@ -20,7 +20,7 @@ function buildTextTimeline(date, quoteSections, duration) {
 
     const quoteStart = 3;
 
-    const endingTime = duration - 2;
+    const endingTime = endingStart;
 
     const available =
         endingTime - quoteStart;
@@ -59,7 +59,7 @@ function buildTextTimeline(date, quoteSections, duration) {
             end:
                 index === quoteSections.length - 1
 
-                    ? duration
+                    ? endingTime
 
                     : Number(
                         (

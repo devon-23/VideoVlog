@@ -10,7 +10,7 @@ const splitQuote = require("../text/quoteSplitter");
 const buildTextTimeline = require("../text/textTimeline");
 const createDateText = require("../text/dateOverlay");
 const addText = require("../text/textRenderer");
-const addEndingText = require("../renderer/addEnding");
+const addEndingText = require("../renderer/addEndingText");
 const getRandomQuote = require("../quotes/quoteSelector");
 const generateTitle = require("../titles/titleGenerator");
 const writeManifest = require("../project/writeManifest");
@@ -163,11 +163,17 @@ async function generateVlog(jobFolder, jobId) {
     console.log("DATE VALUE:", vlogDate);
     console.log("DATE TYPE:", typeof vlogDate);
 
+    const endingDuration =
+        timeline[timeline.length - 1].duration;
+
+    const endingStart = duration - endingDuration;
+
     const textTimeline =
     buildTextTimeline(
         vlogDate,
         sections,
-        duration
+        duration,
+        endingStart
     );
 
     const textVideo =
@@ -198,7 +204,9 @@ async function generateVlog(jobFolder, jobId) {
     await addEndingText(
         textVideo,
         finalQuote,
-        finalOutput
+        finalOutput,
+        endingStart,
+        duration
     );
 
     /*
