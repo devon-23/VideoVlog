@@ -1,5 +1,6 @@
 const ffmpeg = require("fluent-ffmpeg");
 const { escapeDrawtext } = require("../text/textRenderer");
+const { getRandomPosition } = require("../text/textPosition");
 
 
 function addEndingText(video, quote, output, startTime, endTime){
@@ -7,6 +8,7 @@ function addEndingText(video, quote, output, startTime, endTime){
     return new Promise((resolve,reject)=>{
 
         const enableExpr = `between(t\\,${startTime}\\,${endTime})`;
+        const position = getRandomPosition();
 
         const filter =
         `[0:v]drawtext=` +
@@ -16,8 +18,8 @@ function addEndingText(video, quote, output, startTime, endTime){
         `fontcolor=white:` +
         //`borderw=1:` +
         //`bordercolor=black:` +
-        `x=(w-text_w)/2:` +
-        `y=(h-text_h)/2:` +
+        `x=${position.x}:` +
+        `y=${position.y}:` +
         `enable='${enableExpr}'` +
         `[outv]`;
 

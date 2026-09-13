@@ -26,7 +26,7 @@ function renderVideo(timeline, outputPath) {
                 command
                     .input(item.fullPath)
                     .inputOptions([
-                        "-loop 1",
+                        "-stream_loop -1",
                         `-t ${item.duration}`
                     ]);
 

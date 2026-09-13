@@ -1,3 +1,4 @@
+import { File } from "expo-file-system";
 import { SERVER } from "../constants/config";
 
 
@@ -8,19 +9,16 @@ export async function uploadVideos(videos:any[]) {
 
     videos.forEach((video,index)=>{
 
+        const name =
+            video.fileName ??
+            `media_${index}`;
+
+        const file = new File(video.uri);
+
         formData.append(
             "media",
-            {
-                uri: video.uri,
-                name:
-                    video.fileName ??
-                    `media_${index}`,
-
-                type:
-                    video.mimeType ??
-                    "application/octet-stream"
-
-            } as any
+            file,
+            name
         );
 
     });

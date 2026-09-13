@@ -30,8 +30,25 @@ async function generateVlog(jobFolder, jobId) {
 
     let media = scanFolder(uploadsFolder);
 
-    // Get the date BEFORE adding the ending clip
-    const rawDate = await getCreationDate(media);
+    // Get creation dates BEFORE adding the ending clip, then order the
+    // clips earliest to latest so the vlog plays in chronological order
+    const mediaWithDates =
+        await getCreationDate.attachCreationDates(media);
+
+    media = getCreationDate.sortMediaByDate(mediaWithDates);
+
+    const validDates =
+        media
+            .map(item => item.creationDate)
+            .filter(Boolean);
+
+    const rawDate =
+        validDates.length > 0
+            ? validDates.reduce(
+                (min, d) => (d < min ? d : min),
+                validDates[0]
+            ).toISOString()
+            : new Date().toISOString();
 
     const endingBlack = {
         fullPath: path.join(
@@ -168,10 +185,15 @@ async function generateVlog(jobFolder, jobId) {
 
     const endingStart = duration - endingDuration;
 
+    // The final quote section is shown once, on the black ending screen
+    // (via addEndingText below) — leave it out here so it doesn't also
+    // flash over the last bit of the video itself
+    const mainSections = sections.slice(0, -1);
+
     const textTimeline =
     buildTextTimeline(
         vlogDate,
-        sections,
+        mainSections,
         duration,
         endingStart
     );

@@ -54,26 +54,56 @@ async function getFileCreationDate(fullPath) {
     return date;
 }
 
+async function attachCreationDates(media) {
+    const results = [];
+
+    for (const item of media) {
+        if (!item.fullPath) {
+            results.push({ ...item, creationDate: null });
+            continue;
+        }
+
+        const date = await getFileCreationDate(item.fullPath);
+
+        console.log(
+            path.basename(item.fullPath),
+            "->",
+            date
+        );
+
+        results.push({ ...item, creationDate: date });
+    }
+
+    return results;
+}
+
+function sortMediaByDate(mediaWithDates) {
+    return [...mediaWithDates].sort((a, b) => {
+        if (!a.creationDate && !b.creationDate) return 0;
+        if (!a.creationDate) return 1;
+        if (!b.creationDate) return -1;
+
+        return (
+            new Date(a.creationDate) -
+            new Date(b.creationDate)
+        );
+    });
+}
+
 async function getCreationDate(media) {
     if (!media || media.length === 0) {
         return new Date().toISOString();
     }
 
-    const dates = [];
+    const mediaWithDates =
+        await attachCreationDates(
+            media.filter(item => item.fullPath)
+        );
 
-for (const item of media.filter(item => item.fullPath)) {
-    const date = await getFileCreationDate(item.fullPath);
-
-    console.log(
-        path.basename(item.fullPath),
-        "->",
-        date
-    );
-
-    dates.push(date);
-}
-
-    const validDates = dates.filter(Boolean);
+    const validDates =
+        mediaWithDates
+            .map(item => item.creationDate)
+            .filter(Boolean);
 
     if (validDates.length === 0) {
         return new Date().toISOString();
@@ -88,3 +118,5 @@ for (const item of media.filter(item => item.fullPath)) {
 }
 
 module.exports = getCreationDate;
+module.exports.attachCreationDates = attachCreationDates;
+module.exports.sortMediaByDate = sortMediaByDate;

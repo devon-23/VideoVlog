@@ -28,7 +28,10 @@ function addText(video, textTimeline, output) {
             const input = index === 0 ? "[0:v]" : `[v${index - 1}]`;
 
             const fontsize = item.type === "date" ? 70 : 90;
-            const position = getPosition(item.position);
+            const position =
+                typeof item.position === "string"
+                    ? getPosition(item.position)
+                    : item.position;
 
             const enableExpr = `'between(t,${item.start},${item.end})'`;
 

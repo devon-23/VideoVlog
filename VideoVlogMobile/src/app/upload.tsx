@@ -60,7 +60,9 @@ export default function Upload(){
 
 
             setMessage(
-                "Upload complete 🎉"
+                result.success
+                    ? "Upload complete 🎉"
+                    : `Upload failed 😭 ${result.error ?? ""}`
             );
 
 

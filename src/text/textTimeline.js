@@ -1,3 +1,5 @@
+const { getRandomPosition } = require("./textPosition");
+
 function buildTextTimeline(date, quoteSections, duration, endingStart) {
 
     const timeline = [];
@@ -30,15 +32,6 @@ function buildTextTimeline(date, quoteSections, duration, endingStart) {
         available / quoteSections.length;
 
 
-    const positions = [
-        "center",
-        "left",
-        "right",
-        "bottom",
-        "top"
-    ];
-
-
     quoteSections.forEach((section,index)=>{
 
         timeline.push({
@@ -69,8 +62,7 @@ function buildTextTimeline(date, quoteSections, duration, endingStart) {
                         .toFixed(2)
                     ),
 
-            position:
-                positions[index % positions.length]
+            position: getRandomPosition()
 
         });
 
