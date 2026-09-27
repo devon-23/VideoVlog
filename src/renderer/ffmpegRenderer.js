@@ -10,6 +10,13 @@ function renderVideo(timeline, outputPath) {
 
     return new Promise((resolve, reject) => {
 
+        const profile = config.profiles[config.exportProfile];
+
+        const totalDuration = timeline.reduce(
+            (sum, item) => sum + Number(item.duration || 0),
+            0
+        );
+
         let command = ffmpeg();
 
 
@@ -23,10 +30,14 @@ function renderVideo(timeline, outputPath) {
 
             else if(item.type === "image") {
 
+                // -loop (image2 demuxer) not -stream_loop: stream_loop
+                // restarts the image's timestamps on every loop, so the
+                // input -t never fires and the demuxer feeds concat forever
                 command
                     .input(item.fullPath)
                     .inputOptions([
-                        "-stream_loop -1",
+                        "-loop 1",
+                        `-framerate ${profile.fps}`,
                         `-t ${item.duration}`
                     ]);
 
@@ -42,9 +53,9 @@ function renderVideo(timeline, outputPath) {
 
             filters.push(
                 `[${index}:v]` +
-                `scale=${config.profiles[config.exportProfile].width}:${config.profiles[config.exportProfile].height}:force_original_aspect_ratio=increase,` +
-                `crop=${config.profiles[config.exportProfile].width}:${config.profiles[config.exportProfile].height},` +
-                `fps=30,` +
+                `scale=${profile.width}:${profile.height}:force_original_aspect_ratio=increase,` +
+                `crop=${profile.width}:${profile.height},` +
+                `fps=${profile.fps},` +
                 `format=yuv420p,` +
                 `setsar=1` +
                 `[v${index}]`
@@ -77,12 +88,25 @@ function renderVideo(timeline, outputPath) {
                 console.log(cmd);
             })
 
+            // fluent-ffmpeg's own percent is meaningless here (many inputs,
+            // no single Duration to measure against) — derive it from the
+            // timemark and the timeline length we already know
             .on("progress", progress=>{
-                if(progress.percent){
-                    console.log(
-                        `${progress.percent.toFixed(1)}%`
-                    );
-                }
+
+                const seconds = parseTimemark(progress.timemark);
+
+                if(seconds === null || totalDuration <= 0)
+                    return;
+
+                const percent = Math.min(
+                    100,
+                    (seconds / totalDuration) * 100
+                );
+
+                console.log(
+                    `${percent.toFixed(1)}%`
+                );
+
             })
 
             .on("end", ()=>{
@@ -102,6 +126,27 @@ function renderVideo(timeline, outputPath) {
 
 
     });
+
+}
+
+
+function parseTimemark(timemark){
+
+    if(typeof timemark !== "string")
+        return null;
+
+    const parts = timemark.split(":").map(Number);
+
+    if(parts.length !== 3 || parts.some(Number.isNaN))
+        return null;
+
+    const seconds =
+        parts[0] * 3600 +
+        parts[1] * 60 +
+        parts[2];
+
+    // ffmpeg reports AV_NOPTS as a huge negative timemark
+    return seconds < 0 ? null : seconds;
 
 }
 

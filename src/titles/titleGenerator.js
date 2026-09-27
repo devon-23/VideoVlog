@@ -545,7 +545,11 @@ function generateTitle(vlogDate) {
     "the universe said maybe",
     "still not banned",
     "the road to the rivoli",
-    "delusional ambition"
+    "dignified darkness",
+    "the context",
+    "in which you are",
+    "nothing like a good feeling",
+    "sneakin' around is never gonna pay off",
 ];
 
     
