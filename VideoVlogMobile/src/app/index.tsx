@@ -29,7 +29,7 @@ export default function Home(){
 
             <Pressable
                 style={styles.button}
-                onPress={() => router.push("./upload")}
+                onPress={() => router.push("/upload")}
             >
 
                 <Text style={styles.buttonText}>

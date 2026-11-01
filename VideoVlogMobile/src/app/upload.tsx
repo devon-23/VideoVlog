@@ -20,24 +20,47 @@ export default function Upload(){
 
     async function pickVideos(){
 
-        const result =
-            await ImagePicker.launchImageLibraryAsync({
+        try {
 
-                mediaTypes:[
-                    "videos",
-                    "images"
-                ],
-
-                allowsMultipleSelection:true,
-
-                quality:1
-
-            });
+            const permission =
+                await ImagePicker.requestMediaLibraryPermissionsAsync();
 
 
-        if(!result.canceled){
+            if(!permission.granted){
 
-            setVideos(result.assets);
+                setMessage("Photo library access is needed to pick videos");
+                return;
+
+            }
+
+
+            const result =
+                await ImagePicker.launchImageLibraryAsync({
+
+                    mediaTypes:[
+                        "videos",
+                        "images"
+                    ],
+
+                    allowsMultipleSelection:true,
+
+                    quality:1
+
+                });
+
+
+            if(!result.canceled){
+
+                setVideos(result.assets);
+
+            }
+
+        }
+        catch(error){
+
+            console.log(error);
+
+            setMessage(`Could not open library 😭 ${String(error)}`);
 
         }
 
