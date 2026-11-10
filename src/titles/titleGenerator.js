@@ -470,7 +470,7 @@ function generateTitle(vlogDate) {
     "there's still time",
     "we'll figure it out",
     "somehow",
-    "is stop us",
+    "as much as an atheist can",
     "good enough",
     "for old times",
     "don't think about it",
