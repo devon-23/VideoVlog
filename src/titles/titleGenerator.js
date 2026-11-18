@@ -579,15 +579,15 @@ function generateTitle(vlogDate) {
     "a hero's call to action",
     "That's just the thing",
     "heart is full of doubt",
-    "here's no places like my room",
-    "sedated at Christmas",
+    "there's no places like my room",
+    "sedated at christmas",
     "constantly comparing ages",
     "boardwalk 15 years later",
     "pocket notes",
     "bring to your attention",
     "as much as an atheist can",
     "families confusion",
-    "the context in which you are",
+    "best friend rice",
     
 
 ];
